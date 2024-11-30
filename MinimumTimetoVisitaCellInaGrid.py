@@ -1,4 +1,3 @@
-from heapq import heappush
 from typing import List
 import heapq
 
@@ -20,4 +19,4 @@ class Solution:
             for l, m in directions:
                 ni, nj = i + l, j + m
                 if 0 <= ni < len(grid) and 0 <= nj < len(grid[0]) and not used[ni][nj]:
-                    heapq.heappush(heap,(max(k + 1, grid[ni][nj] + abs((ni + nj) % 2 - (grid[ni][nj]) % 2)), ni, nj))
+                    heapq.heappush(heap, (max(k + 1, grid[ni][nj] + (ni + nj - grid[ni][nj]) % 2), ni, nj))
