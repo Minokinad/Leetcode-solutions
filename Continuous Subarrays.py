@@ -1,22 +1,23 @@
+from collections import deque
 from typing import List
 
 
 class Solution:
     def continuousSubarrays(self, nums: List[int]) -> int:
-        ans = len(nums)
-        left = 0
-        right = 0
-        while left <= right < len(nums) - 1:
-            st = 1
-            while right < len(nums) - 1 and abs(nums[right] - nums[left]) <= 2:
-                print(left, right)
-                right += 1
-                if abs(nums[right] - nums[left]) <= 2:
-                    ans += st
-                    st += 1
-            while left < right and abs(nums[right] - nums[left]) > 2:
-                print(left, right)
-                left += 1
-                if abs(nums[right] - nums[left]) <= 2:
-                    ans += st
-        return ans
+        l, res = 0, 0
+        minD, maxD = deque(), deque()
+
+        for r in range(len(nums)):
+            while minD and nums[minD[-1]] >= nums[r]: minD.pop()
+            while maxD and nums[maxD[-1]] <= nums[r]: maxD.pop()
+            minD.append(r)
+            maxD.append(r)
+
+            while nums[maxD[0]] - nums[minD[0]] > 2:
+                l += 1
+                if minD[0] < l: minD.popleft()
+                if maxD[0] < l: maxD.popleft()
+
+            res += r - l + 1
+
+        return res
